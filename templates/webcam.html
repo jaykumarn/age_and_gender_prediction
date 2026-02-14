@@ -17,7 +17,7 @@
             background-attachment: fixed;
             color: #6cacc5;
         }
-        img {
+        img#videoFeed {
             margin-left: 110px;
             padding: 0;
             width: 80vw;
@@ -55,12 +55,28 @@
     <div>
         <div class="header">
             <a href="/"><button>Home</button></a>
+            <button id="captureBtn">Capture</button>
             <h2>Detecting Age and Gender</h2>
         </div>
         
         <div class="container">   
-            <img src="{{ url_for('video_feed') }}" width="100%">
+            <img id="videoFeed" src="{{ url_for('video_feed') }}" width="100%" crossorigin="anonymous">
+            <canvas id="canvas" style="display:none;"></canvas>
         </div>
     </div>
+    <script>
+        document.getElementById('captureBtn').addEventListener('click', function() {
+            var img = document.getElementById('videoFeed');
+            var canvas = document.getElementById('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            var link = document.createElement('a');
+            link.download = 'capture.jpg';
+            link.href = canvas.toDataURL('image/jpeg');
+            link.click();
+        });
+    </script>
 </body>
 </html>
